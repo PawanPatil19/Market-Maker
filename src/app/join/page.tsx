@@ -1,9 +1,10 @@
 "use client";
 import React, { useState } from 'react';
 import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-
+    const router = useRouter();
     const [name, setName] = useState("");
     console.log(name);
 
@@ -21,18 +22,15 @@ export default function Home() {
               'Access-Control-Allow-Origin': '*',
             },
           });
-          console.log("Hii")
 
-          console.log(response);
-    
           if (!response.ok) {
             throw new Error(`Server returned ${response.status} status`);
           }
     
           const result = await response.json();
-          console.log(result)
+          const id = result
           
-          redirect(`/trade/${result}`)
+          router.push(`/trade/${id}`);
         } catch (error) {
           console.error('Error submitting data:', error.message);
         }

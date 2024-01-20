@@ -1,16 +1,82 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'
 import { FaRegUserCircle } from "react-icons/fa";
 
 
-export default function Home() {
-    
+export default function Home({params}) {
+    const router = useRouter()
+    const id = params.id;
+    console.log("id ", id);
+
     const [amount, setAmount] = useState("");
     const [quantity, setQuantity] = useState("");
-    const [orderbook, setOrderbook] = useState();
-    const [username, setUsername] = useState("");
+    const [orders, setOrders] = useState([]);
+    const [username, setUsername] = useState("Username");
 
-    const buyAction = {};
+    const getUserInfo = async (id) => {
+        console.log("my id ", id);
+        try {
+          const url = `http://172.31.94.145:8080/users/${encodeURIComponent(id)}`;
+          const response = await fetch(url);
+    
+          if (!response.ok) {
+            throw new Error(`Server returned ${response.status} status`);
+          }
+    
+          const data = await response.json();
+          setUsername(data.name);
+        } catch (error) {
+          console.error('Error fetching data:', error.message);
+          throw error;
+        }
+      };
+    
+      useEffect(() => {
+        // Replace 'yourUserId' with the actual user ID you want to fetch
+        const userId = id;
+    
+        // Call the getUserInfo function when the component mounts
+        getUserInfo(userId);
+      }, []); // The em
+    
+    
+
+      const buyAction = async (id) => {
+        e.preventDefault();
+        console.log(name);
+        try {
+            const url = `http://172.31.94.145:8080/users/${id}/orders}`;
+
+            var raw = JSON.stringify({
+                "order_id": "0",
+                "price": amount,
+                "quantity": quantity,
+                "type": "B"
+              });
+    
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                },
+                body: raw
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status} status`);
+            }
+        
+            const result = await response.json();
+            const id = result
+            
+            router.push(`/trade/${id}`);
+        } catch (error) {
+          console.error('Error submitting data:', error.message);
+        }
+      };
+       
 
     const sellActions = {};
 
@@ -22,7 +88,7 @@ export default function Home() {
                 <h1 className='text-3xl font-light text-white'>Your market position</h1>
                 <div className='flex items-center'>
                     <FaRegUserCircle className='text-2xl text-white'></FaRegUserCircle>
-                    <h1 className='text-sm font-light  text-white p-2'>Username</h1>
+                    <h1 className='text-sm font-light  text-white p-2'>{username}</h1>
                 </div>
                 
             </div>
@@ -34,7 +100,7 @@ export default function Home() {
                 <div className="w-full ">
                     <div className='border-2 border-white rounded-md p-5 my-2'>
                         <div className='flex flex-col'>
-                            <h1 className='text-sm font-light text-gray-600 '>P&L</h1>
+                            <h1 className='text-sm font-light text-gray-600 '>Expected P&L</h1>
                             <h1 className='text-2xl font-light text-green-400'>+ 0.00</h1>
                         </div>
                     </div>
@@ -62,7 +128,9 @@ export default function Home() {
                     </div>
 
                     <div className='flex my-2 space-x-2'>
-                        <button className="flex-1 text-white bg-green-500 border-r-4 border-b-4 border-t-2 border-l-2 font-light rounded-xl px-4 py-2 text-center">
+                        <button
+                            onClick = {() => buyAction(id)} 
+                            className="flex-1 text-white bg-green-500 border-r-4 border-b-4 border-t-2 border-l-2 font-light rounded-xl px-4 py-2 text-center">
                             <span>
                                 Buy
                             </span>
