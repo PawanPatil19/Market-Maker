@@ -127,7 +127,7 @@ export default function Home() {
             {buyOrders && buyOrders.length > 0 ? (
                 buyOrders.map((order, index) => (
                     
-                        <div className='flex flex-col pb-3' key={index}>
+                        <div key={index} className='flex flex-col pb-3' >
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
                                     <h1 className='text-md font-light text-white'>{order[1]}</h1>
