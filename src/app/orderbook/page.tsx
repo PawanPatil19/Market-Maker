@@ -12,20 +12,19 @@ export default function Home() {
     
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            console.log(time);
-          setTime((prevTime) => prevTime - 1);
-          if (time < 0) {
-            clearInterval(intervalId); // Stop the interval
-            router.push('/result'); // Replace with the actual page URL
-          }
+        const interval = setInterval(() => {
+          setTime((prevSeconds) => prevSeconds - 1);
         }, 1000);
-        
-        
     
-        // Clear the interval when the component is unmounted
-        return () => clearInterval(intervalId);
+        return () => clearInterval(interval);
       }, []);
+    
+      useEffect(() => {
+        if (time <= 0) {
+          // Redirect to another page after 10 minutes
+          router.push('/result');
+        }
+      }, [time, router]);
     
       const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);

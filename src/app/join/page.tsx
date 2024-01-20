@@ -32,7 +32,7 @@ export default function Home() {
           
           router.push(`/trade/${id}`);
         } catch (error) {
-          console.error('Error submitting data:', error.message);
+          console.error('Error submitting data:');
         }
       };
 
