@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 export default function Home() {
     const router = useRouter();
-    const [time, setTime] = useState(5);
+    const [time, setTime] = useState(600);
     const [orders, setOrders] = useState([]);  
     const [buyOrders, setBuyOrders] = useState([]);
     const [sellOrders, setSellOrders] = useState([]);
@@ -93,14 +93,14 @@ export default function Home() {
             <div className="absolute left-1/2 -ml-0.5 w-0.5 h-screen bg-gray-600"></div>
 
             <div className='flex justify-center items-center'>
-            <div className='flex flex-row space-x-20'>
+            <div className='flex flex-row space-x-20 pb-10'>
                 
                 {/* Iterate over orders and display them */}
-                <h1 className='text-md font-light text-white'>Quantity</h1>
-                <h1 className='text-md font-light text-white'>Bid</h1>
+                <h1 className='text-lg font-light text-white'>Quantity</h1>
+                <h1 className='text-lg font-light text-white'>Bid</h1>
 
-                <h1 className='text-md font-light text-white'>Ask</h1>
-                <h1 className='text-md font-light text-white'>Quantity</h1>
+                <h1 className='text-lg font-light text-white'>Ask</h1>
+                <h1 className='text-lg font-light text-white'>Quantity</h1>
                 
             </div>
             </div>
