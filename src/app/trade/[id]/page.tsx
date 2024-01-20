@@ -11,7 +11,9 @@ export default function Home({params}) {
 
     const [amount, setAmount] = useState("");
     const [quantity, setQuantity] = useState("");
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([]);  
+    const [buyOrders, setBuyOrders] = useState([]);
+    const [sellOrders, setSellOrders] = useState([]);
     const [username, setUsername] = useState("Username");
 
     const getUserInfo = async (id) => {
@@ -35,17 +37,59 @@ export default function Home({params}) {
       };
     
       useEffect(() => {
-        // Replace 'yourUserId' with the actual user ID you want to fetch
         const userId = id;
-    
-        // Call the getUserInfo function when the component mounts
         getUserInfo(userId);
-      }, []); // The em
+      }, []); 
+
+      useEffect(() => {
+        // Function to fetch orders from the API
+        const fetchOrders = async () => {
+          try {
+            
+            const response = await fetch(`http://172.31.94.145:8080/orderbook?userid=${id}`); // Replace with your API endpoint
+            if (!response.ok) {
+              throw new Error(`Server returned ${response.status} status`);
+            }
+    
+            const data = await response.json();
+            console.log(data) 
+            const tmp_data1 = data.replace("(", "");
+            const tmp_data2 = tmp_data1.replace(")", "");
+
+            const parts = tmp_data2.split("]],");
+            console.log("parts ", parts)
+
+            // Ensure that each part is a valid JSON array string
+            const array1 = parts[0] + "]]";
+            const array_buy = JSON.parse(array1);
+
+            const array_sell = JSON.parse(parts[1]);
+            console.log("array1: ", array_buy);
+            console.log("array2: ", array_sell);
+
+            setBuyOrders(array_buy);
+            setSellOrders(array_sell);
+
+            
+          } catch (error) {
+            console.error('Error fetching orders:', error.message);
+          }
+        };
+    
+        // Initial fetch
+        fetchOrders();
+    
+        // Fetch orders every 5 seconds (adjust the interval as needed)
+        const intervalId = setInterval(fetchOrders, 1000);
+    
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+      }, []);
     
     
 
       const buyAction = async (idx) => {
-        console.log("buy ", id);
+        console.log("buy ", idx);
         try {
             const url = `http://172.31.94.145:8080/users/${idx}/orders`;
             console.log("url", url);
@@ -130,17 +174,17 @@ export default function Home({params}) {
             <div className="w-full md:flex space-x-2">
 
                 {/* left side */}
-                <div className="w-full ">
+                <div className="w-0.25 ">
                     <div className='border-2 border-white rounded-md p-5 my-2'>
                         <div className='flex flex-col'>
-                            <h1 className='text-sm font-light text-gray-600 '>Expected P&L</h1>
+                            <h1 className='text-sm font-light text-gray-600 '>Expected P&L based on last traded price</h1>
                             <h1 className='text-2xl font-light text-green-400'>+ 0.00</h1>
                         </div>
                     </div>
 
                     <div className='border-2 border-white rounded-md p-4 my-2'>
                         <div className='flex flex-col'>
-                            <h1 className='mx-auto text-md font-light  text-white p-2'>Amount</h1>
+                            <h1 className='mx-auto text-md font-light  text-white p-2'>Price</h1>
                             <input type="text" 
                                 id="amount" 
                                 className="mx-auto border border-gray-300 text-white-900 text-lg rounded-lg focus:ring-orange-400 focus:border-orange-400 block w-20 p-2.5 bg-gray-700  placeholder-gray-400 " 
@@ -178,7 +222,7 @@ export default function Home({params}) {
                     </div>
                 </div>
 
-                <div className="absolute left-1/2 -ml-0.5 w-0.5 h-screen bg-gray-600 hidden md:block"></div>
+                {/* <div className="absolute left-1/2 -ml-0.5 w-0.5 h-screen bg-gray-600 hidden md:block"></div> */}
 
                 {/* right side */}
                 <div className='w-full py-5 md:py-2'>
@@ -186,39 +230,58 @@ export default function Home({params}) {
 
                     <div className='flex justify-center items-center pb-10'>
                         <div className='flex flex-row space-x-20'>
-                            <h1 className='text-md font-light text-white'>Quantity</h1>
+                            <h1 className='text-md font-light text-white'>Your bids</h1>
+                            <h1 className='text-md font-light text-white'>Total bids</h1>
                             <h1 className='text-md font-light text-white'>Bid</h1>
 
                             <h1 className='text-md font-light text-white'>Ask</h1>
-                            <h1 className='text-md font-light text-white'>Quantity</h1>
+                            <h1 className='text-md font-light text-white'>Total asks</h1>
+                            <h1 className='text-md font-light text-white'>Your asks</h1>
                         </div>
                     </div>
 
-                    <div className='flex flex-col pb-3'>
-                        <div className='flex justify-center items-center'>
-                            <div className='flex flex-row space-x-20'>
-                                <h1 className='text-md font-light text-white'>&nbsp;</h1>
-                                <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                    {sellOrders && sellOrders.length > 0 ? (
+                        sellOrders.reverse().map((order, index) => (
+                    
+                        <div className='flex flex-col pb-3'>
+                            <div className='flex justify-center items-center'>
+                                <div className='flex flex-row space-x-20'>
+                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
 
-                                <h1 className='text-md font-light text-red-500'>20000</h1>
-                                <h1 className='text-md font-light text-white'>2</h1>
+                                    <h1 className='text-md font-light text-red-500'>{order[0]}</h1>
+                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-md font-light text-white'>{order[2]}</h1>
+                                </div>
                             </div>
+                            <hr className="border-b w-0.5 border-gray-600" />
                         </div>
-                        <hr className="border-b w-0.5 border-gray-600" />
-                    </div>
+                    
+                ))) : (<p>No orders available</p>)}
 
-                    <div className='flex flex-col pb-3'>
-                        <div className='flex justify-center items-center'>
-                            <div className='flex flex-row space-x-20'>
-                                <h1 className='text-md font-light text-white'>4</h1>
-                                <h1 className='text-md font-light text-green-500'>10000</h1>
+                    {buyOrders && buyOrders.length > 0 ? (
+                buyOrders.map((order, index) => (
+                    
+                        <div className='flex flex-col pb-3'>
+                            <div className='flex justify-center items-center'>
+                                <div className='flex flex-row space-x-20'>
+                                    <h1 className='text-md font-light text-white'>{order[2]}</h1>
+                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-md font-light text-green-500'>{order[0]}</h1>
 
-                                <h1 className='text-md font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
-                                <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-md font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                </div>
                             </div>
+                            <hr className="border-b w-0.5 border-gray-600" />
                         </div>
-                        <hr className="border-b w-0.5 border-gray-600" />
-                    </div>
+                    
+                ))) : (<p>No orders available</p>)}
+
+            
+            
 
                 </div>
 

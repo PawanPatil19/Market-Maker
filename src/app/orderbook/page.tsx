@@ -5,7 +5,8 @@ import React, { useEffect, useState } from 'react';
 export default function Home() {
     //const [time, setTime] = useState(300);
     const [orders, setOrders] = useState([]);  
-    console.log(orders);
+    const [buyOrders, setBuyOrders] = useState([]);
+    const [sellOrders, setSellOrders] = useState([]);
     
     useEffect(() => {
         // Function to fetch orders from the API
@@ -17,7 +18,25 @@ export default function Home() {
             }
     
             const data = await response.json();
-            setOrders(data);
+            console.log(data) 
+            const tmp_data1 = data.replace("(", "");
+            const tmp_data2 = tmp_data1.replace(")", "");
+
+            const parts = tmp_data2.split("]],");
+            console.log("parts ", parts)
+
+            // Ensure that each part is a valid JSON array string
+            const array1 = parts[0] + "]]";
+            const array_buy = JSON.parse(array1);
+
+            const array_sell = JSON.parse(parts[1]);
+            console.log("array1: ", array_buy);
+            console.log("array2: ", array_sell);
+
+            setBuyOrders(array_buy);
+            setSellOrders(array_sell);
+
+            
           } catch (error) {
             console.error('Error fetching orders:', error.message);
           }
@@ -27,7 +46,7 @@ export default function Home() {
         fetchOrders();
     
         // Fetch orders every 5 seconds (adjust the interval as needed)
-        const intervalId = setInterval(fetchOrders, 5000);
+        const intervalId = setInterval(fetchOrders, 1000);
     
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
@@ -45,14 +64,43 @@ export default function Home() {
 
             <div className='flex justify-center items-center'>
             <div className='flex flex-row space-x-20'>
+                
                 {/* Iterate over orders and display them */}
-                {orders.map((order, index) => (
-                    order.type === 'B' ? (
+                <h1 className='text-md font-light text-white'>Quantity</h1>
+                <h1 className='text-md font-light text-white'>Bid</h1>
+
+                <h1 className='text-md font-light text-white'>Ask</h1>
+                <h1 className='text-md font-light text-white'>Quantity</h1>
+                
+            </div>
+            </div>
+
+            {sellOrders && sellOrders.length > 0 ? (
+                sellOrders.reverse().map((order, index) => (
+                    
                         <div className='flex flex-col pb-3'>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
-                                    <h1 className='text-md font-light text-white'>4</h1>
-                                    <h1 className='text-md font-light text-green-500'>10000</h1>
+                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+
+                                    <h1 className='text-md font-light text-red-500'>{order[1]}</h1>
+                                    <h1 className='text-md font-light text-white'>{order[0]}</h1>
+                                </div>
+                            </div>
+                            <hr className="border-b w-0.5 border-gray-600" />
+                        </div>
+                    
+                ))) : (<p>No orders available</p>)}
+
+            {buyOrders && buyOrders.length > 0 ? (
+                buyOrders.map((order, index) => (
+                    
+                        <div className='flex flex-col pb-3'>
+                            <div className='flex justify-center items-center'>
+                                <div className='flex flex-row space-x-20'>
+                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-md font-light text-green-500'>{order[0]}</h1>
 
                                     <h1 className='text-md font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
                                     <h1 className='text-md font-light text-white'>&nbsp;</h1>
@@ -60,23 +108,11 @@ export default function Home() {
                             </div>
                             <hr className="border-b w-0.5 border-gray-600" />
                         </div>
-                    ) : (
-                        <div className='flex flex-col pb-3'>
-                            <div className='flex justify-center items-center'>
-                                <div className='flex flex-row space-x-20'>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
-                                    <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                    
+                ))) : (<p>No orders available</p>)}
 
-                                    <h1 className='text-md font-light text-red-500'>20000</h1>
-                                    <h1 className='text-md font-light text-white'>2</h1>
-                                </div>
-                            </div>
-                            <hr className="border-b w-0.5 border-gray-600" />
-                        </div>
-                    )
-                ))}
-            </div>
-            </div>
+            
+            
 
 
             
