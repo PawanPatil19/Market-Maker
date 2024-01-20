@@ -86,13 +86,16 @@ export default function Home() {
         </div>
 
         <div className="flex float-right pt-20">
-                <button className="text-black bg-white border-r-4 border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light rounded-xl px-4 py-2 text-center">
+            <Link href="/orderbook">
+                <div className="text-black bg-white border-r-4 border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light rounded-xl px-4 py-2 text-center">
                     <span className='flex items-center'>
                     
                     <MdOutlineAttachMoney className='text-lg'/>tart
                     </span>
-                </button>
+                </div>
+            </Link>
             </div>
+            
       </div>
     );
   }
