@@ -1,5 +1,8 @@
 import React from 'react';
 import { FaRegUserCircle } from "react-icons/fa";
+import { IoMdShare } from "react-icons/io";
+import { MdOutlineAttachMoney } from "react-icons/md";
+import Link from 'next/link';
 
 export default function Home() {
     return (
@@ -9,9 +12,18 @@ export default function Home() {
             <div className='flex justify-center items-center'>
                 <h1 className='text-sm font-light py-10 text-white'>Market</h1>
             </div>
-            <div className='flex justify-center items-center pb-60'>
+            <div className='flex justify-center items-center pb-10'>
                 <h1 className='text-7xl font-bold text-white'>Statement</h1>
             </div>
+
+            <Link href = "">
+                <div className='flex justify-center items-center pb-40'>
+                    <h1 className='text-sm font-light underline text-white'>Share link &nbsp;</h1>
+                    <IoMdShare className='text-lg'></IoMdShare>
+                </div>
+            </Link>
+
+            
 
             <div className='flex justify-center items-center'>
                 <div className='flex flex-row space-x-10'>
@@ -50,8 +62,9 @@ export default function Home() {
 
         <div className="flex float-right pt-20">
                 <button className="text-black bg-white border-r-4 border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light rounded-xl px-4 py-2 text-center">
-                    <span>
-                    Start -&gt;
+                    <span className='flex items-center'>
+                    
+                    <MdOutlineAttachMoney className='text-lg'/>tart
                     </span>
                 </button>
             </div>

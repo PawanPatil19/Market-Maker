@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 
-export default function Home() {
+export default async function Home() {
+    const [orderbook, setOrderbook] = useState();
+
+    const getOrderBook = await fetch('');
+
+    
+
+    
+
     return (
     <div className='max-w-screen-xl h-screen mx-auto'>
         <div className='mx-auto'>
