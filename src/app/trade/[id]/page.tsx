@@ -15,6 +15,7 @@ export default function Home({params}) {
     const [buyOrders, setBuyOrders] = useState([]);
     const [sellOrders, setSellOrders] = useState([]);
     const [username, setUsername] = useState("Username");
+    const [PL, setPL] = useState(0);
 
     const getUserInfo = async (id) => {
         console.log("my id ", id);
@@ -46,7 +47,7 @@ export default function Home({params}) {
         const fetchOrders = async () => {
           try {
             
-            const response = await fetch(`http://172.31.94.145:8080/orderbook?userid=${id}`); // Replace with your API endpoint
+            const response = await fetch(`http://172.31.94.145:8080/orderbook/${id}`); // Replace with your API endpoint
             if (!response.ok) {
               throw new Error(`Server returned ${response.status} status`);
             }
@@ -68,7 +69,7 @@ export default function Home({params}) {
             console.log("array2: ", array_sell);
 
             setBuyOrders(array_buy);
-            setSellOrders(array_sell);
+            setSellOrders(array_sell.reverse());
 
             
           } catch (error) {
@@ -81,6 +82,35 @@ export default function Home({params}) {
     
         // Fetch orders every 5 seconds (adjust the interval as needed)
         const intervalId = setInterval(fetchOrders, 1000);
+    
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+      }, []);
+
+      useEffect(() => {
+        // Function to fetch orders from the API
+        const fetchPL = async () => {
+          try {
+            const response = await fetch(`http://172.31.94.145:8080/expected_pnl/${id}`); // Replace with your API endpoint
+            if (!response.ok) {
+              throw new Error(`Server returned ${response.status} status`);
+            }
+    
+            const data = await response.json();
+            console.log(data) 
+            
+
+            
+          } catch (error) {
+            console.error('Error fetching orders:', error.message);
+          }
+        };
+    
+        // Initial fetch
+        fetchPL();
+    
+        // Fetch orders every 5 seconds (adjust the interval as needed)
+        const intervalId = setInterval(fetchPL, 1000);
     
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);
@@ -178,7 +208,7 @@ export default function Home({params}) {
                     <div className='border-2 border-white rounded-md p-5 my-2'>
                         <div className='flex flex-col'>
                             <h1 className='text-sm font-light text-gray-600 '>Expected P&L based on last traded price</h1>
-                            <h1 className='text-2xl font-light text-green-400'>+ 0.00</h1>
+                            <h1 className='text-2xl font-light text-green-400'>{PL}</h1>
                         </div>
                     </div>
 
@@ -241,9 +271,9 @@ export default function Home({params}) {
                     </div>
 
                     {sellOrders && sellOrders.length > 0 ? (
-                        sellOrders.reverse().map((order, index) => (
+                        sellOrders.map((order, index) => (
                     
-                        <div className='flex flex-col pb-3'>
+                        <div className='flex flex-col pb-3' key={index}>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
                                     <h1 className='text-md font-light text-white'>&nbsp;</h1>
@@ -263,7 +293,7 @@ export default function Home({params}) {
                     {buyOrders && buyOrders.length > 0 ? (
                 buyOrders.map((order, index) => (
                     
-                        <div className='flex flex-col pb-3'>
+                        <div className='flex flex-col pb-3' key={index}>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
                                     <h1 className='text-md font-light text-white'>{order[2]}</h1>

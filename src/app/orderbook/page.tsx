@@ -1,12 +1,37 @@
 "use client";
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'
 
 
 export default function Home() {
-    //const [time, setTime] = useState(300);
+    const router = useRouter();
+    const [time, setTime] = useState(5);
     const [orders, setOrders] = useState([]);  
     const [buyOrders, setBuyOrders] = useState([]);
     const [sellOrders, setSellOrders] = useState([]);
+    
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            console.log(time);
+          setTime((prevTime) => prevTime - 1);
+          if (time < 0) {
+            clearInterval(intervalId); // Stop the interval
+            router.push('/result'); // Replace with the actual page URL
+          }
+        }, 1000);
+        
+        
+    
+        // Clear the interval when the component is unmounted
+        return () => clearInterval(intervalId);
+      }, []);
+    
+      const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+      };
     
     useEffect(() => {
         // Function to fetch orders from the API
@@ -34,7 +59,7 @@ export default function Home() {
             console.log("array2: ", array_sell);
 
             setBuyOrders(array_buy);
-            setSellOrders(array_sell);
+            setSellOrders(array_sell.reverse());
 
             
           } catch (error) {
@@ -52,12 +77,18 @@ export default function Home() {
         return () => clearInterval(intervalId);
       }, []);
 
+      
+
     return (
     <div className='max-w-screen-xl h-screen mx-auto'>
         <div className='mx-auto'>
 
             <div className='flex justify-center items-center'>
-                <h1 className='text-4xl font-bold py-10 text-white'>Order Book</h1>
+                <h1 className='text-4xl font-bold pt-10 pb-2 text-white'>Order Book</h1>
+            </div>
+
+            <div className="text-center my-4">
+                <p className="text-5xl py-5">{formatTime(time)}</p>
             </div>
 
             <div className="absolute left-1/2 -ml-0.5 w-0.5 h-screen bg-gray-600"></div>
@@ -76,16 +107,16 @@ export default function Home() {
             </div>
 
             {sellOrders && sellOrders.length > 0 ? (
-                sellOrders.reverse().map((order, index) => (
+                sellOrders.map((order, index) => (
                     
-                        <div className='flex flex-col pb-3'>
+                        <div className='flex flex-col pb-3' key={index}>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
                                     <h1 className='text-md font-light text-white'>&nbsp;</h1>
                                     <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
 
-                                    <h1 className='text-md font-light text-red-500'>{order[1]}</h1>
-                                    <h1 className='text-md font-light text-white'>{order[0]}</h1>
+                                    <h1 className='text-md font-light text-red-500'>{order[0]}</h1>
+                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
                                 </div>
                             </div>
                             <hr className="border-b w-0.5 border-gray-600" />
@@ -96,7 +127,7 @@ export default function Home() {
             {buyOrders && buyOrders.length > 0 ? (
                 buyOrders.map((order, index) => (
                     
-                        <div className='flex flex-col pb-3'>
+                        <div className='flex flex-col pb-3' key={index}>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
                                     <h1 className='text-md font-light text-white'>{order[1]}</h1>

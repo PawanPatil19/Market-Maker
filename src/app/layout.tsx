@@ -22,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>{children}
-      <script src="./node_modules/preline/dist/preline.js"></script>
       </body>
     </html>
   );
