@@ -25,6 +25,8 @@ export default function Home({params}) {
           }
     
           const data = await response.json();
+          console.log("Name ", data)
+
           setUsername(data.name);
         } catch (error) {
           console.error('Error fetching data:', error.message);
@@ -42,11 +44,11 @@ export default function Home({params}) {
     
     
 
-      const buyAction = async (id) => {
-        e.preventDefault();
-        console.log(name);
+      const buyAction = async (idx) => {
+        console.log("buy ", id);
         try {
-            const url = `http://172.31.94.145:8080/users/${id}/orders}`;
+            const url = `http://172.31.94.145:8080/users/${idx}/orders`;
+            console.log("url", url);
 
             var raw = JSON.stringify({
                 "order_id": "0",
@@ -69,16 +71,47 @@ export default function Home({params}) {
             }
         
             const result = await response.json();
-            const id = result
-            
-            router.push(`/trade/${id}`);
+            console.log("result", result)
+    
         } catch (error) {
           console.error('Error submitting data:', error.message);
         }
       };
-       
 
-    const sellActions = {};
+
+      const sellAction = async (idx) => {
+        console.log("buy ", id);
+        try {
+            const url = `http://172.31.94.145:8080/users/${idx}/orders`;
+            console.log("url", url);
+
+            var raw = JSON.stringify({
+                "order_id": "0",
+                "price": amount,
+                "quantity": quantity,
+                "type": "S"
+              });
+    
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                },
+                body: raw
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status} status`);
+            }
+        
+            const result = await response.json();
+            console.log("result", result)
+    
+        } catch (error) {
+          console.error('Error submitting data:', error.message);
+        }
+      };
 
     
 
@@ -135,7 +168,9 @@ export default function Home({params}) {
                                 Buy
                             </span>
                         </button>
-                        <button className="flex-1 text-white bg-red-500 border-r-4 border-b-4 border-t-2 border-l-2 font-light rounded-xl px-4 py-2 text-center">
+                        <button 
+                            onClick = {() => sellAction(id)} 
+                            className="flex-1 text-white bg-red-500 border-r-4 border-b-4 border-t-2 border-l-2 font-light rounded-xl px-4 py-2 text-center">
                             <span>
                                 Sell
                             </span>
@@ -185,16 +220,9 @@ export default function Home({params}) {
                         <hr className="border-b w-0.5 border-gray-600" />
                     </div>
 
-                    
                 </div>
 
-                
-
-
             </div>
-
-
-            
             
         </div>
     )

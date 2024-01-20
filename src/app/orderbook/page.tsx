@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 export default function Home() {
     //const [time, setTime] = useState(300);
     const [orders, setOrders] = useState([]);  
+    console.log(orders);
     
     useEffect(() => {
         // Function to fetch orders from the API
