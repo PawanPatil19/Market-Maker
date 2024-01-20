@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { FaRegUserCircle } from "react-icons/fa";
 
 
-export default function Home({params}) {
+export default function Home({params} : any) {
     const router = useRouter()
     const id = params.id;
     console.log("id ", id);
@@ -17,7 +17,7 @@ export default function Home({params}) {
     const [username, setUsername] = useState("Username");
     const [PL, setPL] = useState(0);
 
-    const getUserInfo = async (id) => {
+    const getUserInfo = async (id: string | number | boolean) => {
         console.log("my id ", id);
         try {
           const url = `http://172.31.94.145:8080/users/${encodeURIComponent(id)}`;
@@ -32,7 +32,7 @@ export default function Home({params}) {
 
           setUsername(data.name);
         } catch (error) {
-          console.error('Error fetching data:', error.message);
+          console.error('Error fetching data:');
           throw error;
         }
       };
@@ -73,7 +73,7 @@ export default function Home({params}) {
 
             
           } catch (error) {
-            console.error('Error fetching orders:', error.message);
+            console.error('Error fetching orders:');
           }
         };
     
@@ -102,7 +102,7 @@ export default function Home({params}) {
 
             
           } catch (error) {
-            console.error('Error fetching orders:', error.message);
+            console.error('Error fetching orders:');
           }
         };
     
@@ -118,7 +118,7 @@ export default function Home({params}) {
     
     
 
-      const buyAction = async (idx) => {
+      const buyAction = async (idx: any) => {
         console.log("buy ", idx);
         try {
             const url = `http://172.31.94.145:8080/users/${idx}/orders`;
@@ -148,12 +148,12 @@ export default function Home({params}) {
             console.log("result", result)
     
         } catch (error) {
-          console.error('Error submitting data:', error.message);
+          console.error('Error submitting data:');
         }
       };
 
 
-      const sellAction = async (idx) => {
+      const sellAction = async (idx: any) => {
         console.log("buy ", id);
         try {
             const url = `http://172.31.94.145:8080/users/${idx}/orders`;
@@ -183,7 +183,7 @@ export default function Home({params}) {
             console.log("result", result)
     
         } catch (error) {
-          console.error('Error submitting data:', error.message);
+          console.error('Error submitting data:');
         }
       };
 

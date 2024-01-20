@@ -27,7 +27,7 @@ export default function Home() {
         return () => clearInterval(intervalId);
       }, []);
     
-      const formatTime = (seconds) => {
+      const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
         return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
@@ -63,7 +63,7 @@ export default function Home() {
 
             
           } catch (error) {
-            console.error('Error fetching orders:', error.message);
+            console.error('Error fetching orders:');
           }
         };
     
@@ -109,7 +109,7 @@ export default function Home() {
             {sellOrders && sellOrders.length > 0 ? (
                 sellOrders.map((order, index) => (
                     
-                        <div className='flex flex-col pb-3' key={index}>
+                        <div key={index} className='flex flex-col pb-3' >
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
                                     <h1 className='text-md font-light text-white'>&nbsp;</h1>
