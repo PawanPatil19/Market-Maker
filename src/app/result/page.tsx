@@ -1,7 +1,31 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 
 
 export default function Home() {
+    const [results, setResults] = useState([]);
+
+    useEffect(() => {
+        const fetchResults = async () => {
+          try {
+            const response = await fetch('http://172.31.94.145:8080/results', {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Access-Control-Allow-Origin': '*',
+                }});
+            
+            const result = await response.json();
+            console.log(result)
+            setResults(result);
+          } catch (error) {
+            // Handle error
+          }
+        };
+    
+        fetchResults();
+      }, []);
+
     return (
     <div className='max-w-screen-xl h-screen mx-auto'>
         <div className='mx-auto'>
@@ -26,11 +50,11 @@ export default function Home() {
                 </div>
 
                 <div className='flex justify-center items-center'>
-                    <h1 className='text-4xl font-light py-5 text-white'>User name</h1>
+                    <h1 className='text-4xl font-light py-5 text-white'>{results[0][0]}</h1>
                 </div>
 
                 <div className='flex justify-center items-center'>
-                    <h1 className='text-md font-light text-green-500'>+0.00</h1>
+                    <h1 className='text-md font-light text-green-500'>{results[0][1]}</h1>
                 </div>
 
             </div>
