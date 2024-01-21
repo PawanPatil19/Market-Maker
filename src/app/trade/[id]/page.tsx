@@ -29,33 +29,41 @@ export default function Home({params} : any) {
     const [username, setUsername] = useState("Username");
     const [PL, setPL] = useState(0);
     const [position, setPosition] = useState(0);
-    
 
-    const getUserInfo = async (id: string | number | boolean) => {
-        console.log("my id ", id);
-        try {
-          const url = `http://172.31.94.145:8080/users/${encodeURIComponent(id)}`;
-          const response = await fetch(url);
-    
-          if (!response.ok) {
-            throw new Error(`Server returned ${response.status} status`);
-          }
-    
-          const data = await response.json();
-          console.log("Name ", data)
 
-          setUsername(data.name);
-          setPosition(data.score)
-        } catch (error) {
-          console.error('Error fetching data:');
-          throw error;
-        }
-      };
+    useEffect(() => {
+        // Function to fetch orders from the API
+        const fetchUser = async () => {
+            try {
+                const url = `http://172.31.94.145:8080/users/${encodeURIComponent(id)}`;
+                const response = await fetch(url);
+          
+                if (!response.ok) {
+                  throw new Error(`Server returned ${response.status} status`);
+                }
+          
+                const data = await response.json();
+                console.log("Name ", data)
+      
+                setUsername(data.name);
+                setPosition(data.score)
+              } catch (error) {
+                console.error('Error fetching data:');
+                throw error;
+              }
+        };
     
-      useEffect(() => {
-        const userId = id;
-        getUserInfo(userId);
-      }, []); 
+        // Initial fetch
+        fetchUser();
+    
+        // Fetch orders every 5 seconds (adjust the interval as needed)
+        const intervalId = setInterval(fetchUser, 100);
+    
+        // Cleanup interval on component unmount
+        return () => clearInterval(intervalId);
+      }, []);
+    
+     
 
       useEffect(() => {
         // Function to fetch orders from the API
@@ -96,7 +104,7 @@ export default function Home({params} : any) {
         fetchOrders();
     
         // Fetch orders every 5 seconds (adjust the interval as needed)
-        const intervalId = setInterval(fetchOrders, 1000);
+        const intervalId = setInterval(fetchOrders, 100);
     
         // Cleanup interval on component unmount
         return () => clearInterval(intervalId);

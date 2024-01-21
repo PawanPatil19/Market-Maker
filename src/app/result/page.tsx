@@ -36,13 +36,13 @@ export default function Home() {
             </div>
 
 
-            <div className='w-full flex flex-col space-y-2'>
+            {/* <div className='w-full flex flex-col space-y-2'>
                 <div className='flex flex-row space-x-5 items-center'>
                     <h1 className='text-md font-light py-5 text-white'>2. </h1>
                     <h1 className='text-md font-light py-5 text-white'>User name</h1>
                     <h1 className='text-md font-light text-green-500'>+0.00</h1>
                 </div>
-            </div>
+            </div> */}
 
 
         
