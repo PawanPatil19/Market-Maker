@@ -208,7 +208,7 @@ export default function Home({params} : any) {
         <div className='max-w-screen-xl mx-auto'>
             <div className='flex justify-between items-center pt-20 pb-10'>
                 <div className='flex space-x-5'>
-                    <h1 className='text-3xl font-light text-white'>Your market position - </h1>
+                    <h1 className='text-3xl font-light text-white'>Your market position : </h1>
                     <h1 className='text-3xl font-light text-white'>{position}</h1>
                 </div>
                 <div className='flex items-center'>
