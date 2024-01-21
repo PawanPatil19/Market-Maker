@@ -7,6 +7,7 @@ import Link from 'next/link'
 export default function Home() {
     const router = useRouter();
     const [time, setTime] = useState(600);
+    const [isPaused, setIsPaused] = useState(false);
     const [orders, setOrders] = useState([]);  
     const [buyOrders, setBuyOrders] = useState([]);
     const [sellOrders, setSellOrders] = useState([]);
@@ -15,19 +16,27 @@ export default function Home() {
     
 
     useEffect(() => {
-        const interval = setInterval(() => {
-          setTime((prevSeconds) => prevSeconds - 1);
-        }, 1000);
+        let interval;
+    
+        if (!isPaused) {
+          interval = setInterval(() => {
+            setTime((prevSeconds) => (prevSeconds > 0 ? prevSeconds - 1 : 0));
+          }, 1000);
+        }
     
         return () => clearInterval(interval);
-      }, []);
+      }, [isPaused]);
     
       useEffect(() => {
         if (time <= 0) {
           // Redirect to another page after 10 minutes
-          router.push('/result');
+          router.push('/redirect-page');
         }
       }, [time, router]);
+    
+      const handlePauseStart = () => {
+        setIsPaused((prevIsPaused) => !prevIsPaused);
+      };
     
       const formatTime = (seconds: number) => {
         const minutes = Math.floor(seconds / 60);
@@ -88,9 +97,15 @@ export default function Home() {
 
     return (
     <div className='max-w-screen-xl h-screen mx-auto'>
-        <div className="flex float-right pt-20">
-                <Link href="/orderbook">
-                    <div className="text-black bg-white border-r-4 border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light rounded-xl px-4 py-2 text-center">
+        <div className="flex flex-col float-right pt-20 relative">
+            <button
+                className="text-black bg-white rounded-full border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light  px-4 py-2 text-center"
+                onClick={handlePauseStart}
+            >
+                {isPaused ? 'Start' : 'Pause'}
+        </button>
+                <Link href="/end">
+                    <div className="text-black bg-white border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light rounded-full px-4 py-2 text-center">
                         <span className='flex items-center'>
                             End
                         </span>

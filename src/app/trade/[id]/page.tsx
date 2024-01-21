@@ -28,6 +28,7 @@ export default function Home({params} : any) {
     const [sellOrders, setSellOrders] = useState([]);
     const [username, setUsername] = useState("Username");
     const [PL, setPL] = useState(0);
+    const [position, setPosition] = useState(0);
     
 
     const getUserInfo = async (id: string | number | boolean) => {
@@ -44,6 +45,7 @@ export default function Home({params} : any) {
           console.log("Name ", data)
 
           setUsername(data.name);
+          setPosition(data.score)
         } catch (error) {
           console.error('Error fetching data:');
           throw error;
@@ -110,7 +112,7 @@ export default function Home({params} : any) {
             }
     
             const data = await response.json();
-            console.log(data) 
+            setPL(data);
             
 
             
@@ -205,7 +207,10 @@ export default function Home({params} : any) {
     return (
         <div className='max-w-screen-xl mx-auto'>
             <div className='flex justify-between items-center pt-20 pb-10'>
-                <h1 className='text-3xl font-light text-white'>Your market position</h1>
+                <div className='flex space-x-5'>
+                    <h1 className='text-3xl font-light text-white'>Your market position - </h1>
+                    <h1 className='text-3xl font-light text-white'>{position}</h1>
+                </div>
                 <div className='flex items-center'>
                     <FaRegUserCircle className='text-2xl text-white'></FaRegUserCircle>
                     <h1 className='text-sm font-light  text-white p-2'>{username}</h1>
@@ -221,7 +226,14 @@ export default function Home({params} : any) {
                     <div className='border-2 border-white rounded-md p-5 my-2'>
                         <div className='flex flex-col'>
                             <h1 className='text-sm font-light text-gray-600 '>Expected P&L based on last traded price</h1>
-                            <h1 className='text-2xl font-light text-green-400'>{PL}</h1>
+                            {
+                                PL>=0 ? (
+                                    <h1 className='text-2xl font-light text-green-400'>{PL}</h1>
+                                ) : (
+                                    <h1 className='text-2xl font-light text-red-400'>{PL}</h1>
+                                )
+                            }
+                            
                         </div>
                     </div>
 
