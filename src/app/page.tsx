@@ -5,7 +5,6 @@ import Link from 'next/link'
 
 
 export default async function Home() {
-  const initializeMarket = {}
 
   return (
     <div className='max-w-screen-xl flex h-screen items-center  mx-auto'>

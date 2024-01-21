@@ -10,6 +10,7 @@ export default function Home() {
     const [players, setPlayers] = useState([]);
     const [count, setCount] = useState([]);
 
+
     useEffect(() => {
         // Function to fetch orders from the API
         const fetchPlayers = async () => {
@@ -82,6 +83,8 @@ export default function Home() {
             <div className='flex justify-center items-center'>
                 <h1 className='text-sm font-light py-10 text-white'>{count} Traders joined...</h1>
             </div>
+
+            
           
         </div>
 
@@ -94,7 +97,7 @@ export default function Home() {
                     </span>
                 </div>
             </Link>
-            </div>
+        </div>
             
       </div>
     );

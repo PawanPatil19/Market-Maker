@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 
 export default function Home() {
@@ -87,6 +88,15 @@ export default function Home() {
 
     return (
     <div className='max-w-screen-xl h-screen mx-auto'>
+        <div className="flex float-right pt-20">
+                <Link href="/orderbook">
+                    <div className="text-black bg-white border-r-4 border-b-4 border-t-2 border-l-2  hover:bg-orange-400 hover:text-white font-light rounded-xl px-4 py-2 text-center">
+                        <span className='flex items-center'>
+                            End
+                        </span>
+                    </div>
+                </Link>
+        </div>
         <div className='mx-auto'>
 
             <div className='flex justify-center items-center'>
@@ -151,8 +161,6 @@ export default function Home() {
                 ))) : (<p>No orders available</p>)}
 
             
-            
-
 
             
         
