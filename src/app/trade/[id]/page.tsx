@@ -2,6 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { FaRegUserCircle } from "react-icons/fa";
+import {
+    Badge,
+    Card,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeaderCell,
+    TableRow,
+    Text,
+    Title,
+  } from "@tremor/react";
 
 
 export default function Home({params} : any) {
@@ -16,6 +28,7 @@ export default function Home({params} : any) {
     const [sellOrders, setSellOrders] = useState([]);
     const [username, setUsername] = useState("Username");
     const [PL, setPL] = useState(0);
+    
 
     const getUserInfo = async (id: string | number | boolean) => {
         console.log("my id ", id);
@@ -258,7 +271,7 @@ export default function Home({params} : any) {
                 <div className='w-full py-5 md:py-2'>
                     
 
-                    <div className='flex justify-center items-center pb-10'>
+                    {/* <div className='flex justify-center items-center pb-10'>
                         <div className='flex flex-row space-x-20'>
                             <h1 className='text-md font-light text-white'>Your bids</h1>
                             <h1 className='text-md font-light text-white'>Total bids</h1>
@@ -268,47 +281,111 @@ export default function Home({params} : any) {
                             <h1 className='text-md font-light text-white'>Total asks</h1>
                             <h1 className='text-md font-light text-white'>Your asks</h1>
                         </div>
-                    </div>
+                    </div> */}
 
-                    {sellOrders && sellOrders.length > 0 ? (
+                    {/* {sellOrders && sellOrders.length > 0 ? (
                         sellOrders.map((order, index) => (
                     
                         <div className='flex flex-col pb-3' key={index}>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
-                                    <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
 
-                                    <h1 className='text-md font-light text-red-500'>{order[0]}</h1>
-                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
-                                    <h1 className='text-md font-light text-white'>{order[2]}</h1>
+                                    <h1 className='text-lg font-light text-red-500'>{order[0]}</h1>
+                                    <h1 className='text-lg font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-lg font-light text-white'>{order[2]}</h1>
                                 </div>
                             </div>
                             <hr className="border-b w-0.5 border-gray-600" />
                         </div>
                     
-                ))) : (<p>No orders available</p>)}
+                ))) : (<p>No ask orders available</p>)} */}
 
-                    {buyOrders && buyOrders.length > 0 ? (
+                    {/* {buyOrders && buyOrders.length > 0 ? (
                 buyOrders.map((order, index) => (
                     
                         <div className='flex flex-col pb-3' key={index}>
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
-                                    <h1 className='text-md font-light text-white'>{order[2]}</h1>
-                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
-                                    <h1 className='text-md font-light text-green-500'>{order[0]}</h1>
+                                    <h1 className='text-lg font-light text-white'>{order[2]}</h1>
+                                    <h1 className='text-lg font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-lg font-light text-green-500'>{order[0]}</h1>
 
-                                    <h1 className='text-md font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-white'>&nbsp;</h1>
                                 </div>
                             </div>
                             <hr className="border-b w-0.5 border-gray-600" />
                         </div>
                     
-                ))) : (<p>No orders available</p>)}
+                ))) : (<p>No buy orders available</p>)} */}
+
+
+                <Card>
+                    
+                    <Table className="mt-5">
+                    <TableHead>
+                        <TableRow>
+                        <TableHeaderCell>Total bids</TableHeaderCell>
+                        <TableHeaderCell>Size</TableHeaderCell>
+                        <TableHeaderCell>Bid</TableHeaderCell>
+                        <TableHeaderCell>Ask</TableHeaderCell>
+                        <TableHeaderCell>Size</TableHeaderCell>
+                        <TableHeaderCell>Total asks</TableHeaderCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {sellOrders && sellOrders.length > 0 ? (sellOrders.map((item, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                
+                            </TableCell>
+                            <TableCell>
+                            
+                            </TableCell>
+                            <TableCell>
+                            
+                            </TableCell>
+                            <TableCell>
+                            <span className='text-green-500'>{item[0]}</span>
+                            </TableCell>
+                            <TableCell>
+                            {item[2]}
+                            </TableCell>
+                            <TableCell>
+                            {item[1]}
+                            </TableCell>
+                        </TableRow>
+                        ))) : (<p>No ask orders available</p>)}
+
+                        {buyOrders && buyOrders.length > 0 ? ( buyOrders.map((item, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                            {item[1]}
+                            </TableCell>
+                            <TableCell>
+                            {item[2]}
+                            </TableCell>
+                            <TableCell>
+                            <span className='text-red-500'>{item[0]}</span>
+                            </TableCell>
+                            <TableCell>
+                            
+                            </TableCell>
+                            <TableCell>
+                            
+                            </TableCell>
+                            <TableCell>
+                            
+                            </TableCell>
+                        </TableRow>
+                        ))): (<p>No buy orders available</p>)}
+                    </TableBody>
+                    </Table>
+                </Card>
 
             
             

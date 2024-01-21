@@ -9,6 +9,8 @@ export default function Home() {
     const [orders, setOrders] = useState([]);  
     const [buyOrders, setBuyOrders] = useState([]);
     const [sellOrders, setSellOrders] = useState([]);
+    var disaplyBuy = true;
+    var disaplySell = true;
     
 
     useEffect(() => {
@@ -51,14 +53,19 @@ export default function Home() {
 
             // Ensure that each part is a valid JSON array string
             const array1 = parts[0] + "]]";
-            const array_buy = JSON.parse(array1);
+            if (array1.length <= 2) {
+                disaplyBuy = false;
+            } else {
+                const array_buy = JSON.parse(array1);
+                setBuyOrders(array_buy);
+            }
 
-            const array_sell = JSON.parse(parts[1]);
-            console.log("array1: ", array_buy);
-            console.log("array2: ", array_sell);
-
-            setBuyOrders(array_buy);
-            setSellOrders(array_sell.reverse());
+            if (parts[1].length <= 2) {
+                disaplySell = false;
+            } else {
+                const array_sell = JSON.parse(parts[1]);
+                setSellOrders(array_sell.reverse());
+            }
 
             
           } catch (error) {
@@ -107,37 +114,39 @@ export default function Home() {
 
             {sellOrders && sellOrders.length > 0 ? (
                 sellOrders.map((order, index) => (
-                    
+                    disaplySell && (
                         <div key={index} className='flex flex-col pb-3' >
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
-                                    <h1 className='text-md font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-green-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
 
-                                    <h1 className='text-md font-light text-red-500'>{order[0]}</h1>
-                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-lg font-light text-red-500'>{order[0]}</h1>
+                                    <h1 className='text-lg font-light text-white'>{order[1]}</h1>
                                 </div>
                             </div>
                             <hr className="border-b w-0.5 border-gray-600" />
                         </div>
+                    )
                     
                 ))) : (<p>No orders available</p>)}
 
             {buyOrders && buyOrders.length > 0 ? (
                 buyOrders.map((order, index) => (
-                    
+                    disaplyBuy && (
                         <div key={index} className='flex flex-col pb-3' >
                             <div className='flex justify-center items-center'>
                                 <div className='flex flex-row space-x-20'>
-                                    <h1 className='text-md font-light text-white'>{order[1]}</h1>
-                                    <h1 className='text-md font-light text-green-500'>{order[0]}</h1>
+                                    <h1 className='text-lg font-light text-white'>{order[1]}</h1>
+                                    <h1 className='text-lg font-light text-green-500'>{order[0]}</h1>
 
-                                    <h1 className='text-md font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
-                                    <h1 className='text-md font-light text-white'>&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-red-500'>&nbsp;&nbsp;&nbsp;&nbsp;</h1>
+                                    <h1 className='text-lg font-light text-white'>&nbsp;</h1>
                                 </div>
                             </div>
                             <hr className="border-b w-0.5 border-gray-600" />
                         </div>
+                    )
                     
                 ))) : (<p>No orders available</p>)}
 
