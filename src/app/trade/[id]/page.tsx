@@ -350,10 +350,10 @@ export default function Home({params} : any) {
                     <TableHead>
                         <TableRow>
                         <TableHeaderCell>Total bids</TableHeaderCell>
-                        <TableHeaderCell>Size</TableHeaderCell>
+                        <TableHeaderCell>Your bids</TableHeaderCell>
                         <TableHeaderCell>Bid</TableHeaderCell>
                         <TableHeaderCell>Ask</TableHeaderCell>
-                        <TableHeaderCell>Size</TableHeaderCell>
+                        <TableHeaderCell>Your asks</TableHeaderCell>
                         <TableHeaderCell>Total asks</TableHeaderCell>
                         </TableRow>
                     </TableHead>
